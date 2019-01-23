@@ -240,12 +240,9 @@ class Adversarial(object):
         #print(is_adversarial)
         assert isinstance(is_adversarial, bool) or \
             isinstance(is_adversarial, np.bool_)
-        if is_adversarial:
-            is_best, distance = self.__new_adversarial(
-                image, predictions, in_bounds)
-        else:
-            is_best = False
-            distance = None
+        is_best, distance = self.__new_adversarial(
+            image, predictions, in_bounds)
+
         return is_adversarial, is_best, distance
 
     def target_class(self):
