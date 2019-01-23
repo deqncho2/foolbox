@@ -236,7 +236,7 @@ class Adversarial(object):
         # print(self.__threshold)
 
         is_adversarial = self.__criterion.is_adversarial(
-            predictions, self.__original_class) and self.normalized_distance(image)
+            predictions, self.__original_class)
         #print(is_adversarial)
         assert isinstance(is_adversarial, bool) or \
             isinstance(is_adversarial, np.bool_)
