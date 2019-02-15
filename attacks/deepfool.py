@@ -141,6 +141,7 @@ class DeepFoolAttack(Attack):
                 assert False
 
             # choose optimal one
+            print(distances)
             optimal = np.argmin(distances)
             df, dg = diffs[optimal]
 
