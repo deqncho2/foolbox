@@ -110,6 +110,8 @@ class DeepFoolAttack(Attack):
             print('--')
             print(logits)
             print(grad)
+            print(logits.shape)
+            print(grad.shape)
             print('--')
             # correspondance to algorithm 2 in [1]_:
             #
