@@ -1,3 +1,4 @@
+
 import logging
 
 import numpy as np
@@ -12,15 +13,12 @@ from ..distances import Linfinity
 class DeepFoolAttack(Attack):
     """Simple and close to optimal gradient-based
     adversarial attack.
-
     Implementes DeepFool introduced in [1]_.
-
     References
     ----------
     .. [1] Seyed-Mohsen Moosavi-Dezfooli, Alhussein Fawzi, Pascal Frossard,
            "DeepFool: a simple and accurate method to fool deep neural
            networks", https://arxiv.org/abs/1511.04599
-
     """
 
     @call_decorator
@@ -29,7 +27,6 @@ class DeepFoolAttack(Attack):
 
         """Simple and close to optimal gradient-based
         adversarial attack.
-
         Parameters
         ----------
         input_or_adv : `numpy.ndarray` or :class:`Adversarial`
@@ -50,7 +47,6 @@ class DeepFoolAttack(Attack):
             faster.
         p : int or float
             Lp-norm that should be minimzed, must be 2 or np.inf.
-
         """
 
         a = input_or_adv
@@ -105,14 +101,9 @@ class DeepFoolAttack(Attack):
 
         for step in range(steps):
             logits, grad, is_adv = a.predictions_and_gradient(perturbed)
-            # if is_adv:
-            #     return
-            print('--')
-            print(logits)
-            print(grad)
-            print(logits.shape)
-            print(grad.shape)
-            print('--')
+            if is_adv:
+                return
+
             # correspondance to algorithm 2 in [1]_:
             #
             # loss corresponds to f (in the paper: negative cross-entropy)
@@ -121,7 +112,7 @@ class DeepFoolAttack(Attack):
             loss = -crossentropy(logits=logits, label=_label)
 
             residual_labels = get_residual_labels(logits)
-            print(residual_labels)
+
             # instead of using the logits and the gradient of the logits,
             # we use a numerically stable implementation of the cross-entropy
             # and expect that the deep learning frameworks also use such a
@@ -129,13 +120,12 @@ class DeepFoolAttack(Attack):
             losses = [
                 -crossentropy(logits=logits, label=k)
                 for k in residual_labels]
-            print(losses)
             grads = [a.gradient(perturbed, label=k) for k in residual_labels]
-            print(grads)
+
             # compute optimal direction (and loss difference)
             # pairwise between each label and the target
             diffs = [(l - loss, g - grad) for l, g in zip(losses, grads)]
-            print(diffs)
+
             # calculate distances
             if p == 2:
                 distances = [abs(dl) / (np.linalg.norm(dg) + 1e-8)
@@ -147,8 +137,6 @@ class DeepFoolAttack(Attack):
                 assert False
 
             # choose optimal one
-            print(distances)
-            print('----')
             optimal = np.argmin(distances)
             df, dg = diffs[optimal]
 
