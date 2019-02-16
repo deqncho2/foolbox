@@ -101,8 +101,8 @@ class DeepFoolAttack(Attack):
 
         for step in range(steps):
             logits, grad, is_adv = a.predictions_and_gradient(perturbed)
-            if is_adv:
-                return
+#             if is_adv:
+#                 return
 
             # correspondance to algorithm 2 in [1]_:
             #
@@ -112,6 +112,9 @@ class DeepFoolAttack(Attack):
             loss = -crossentropy(logits=logits, label=_label)
 
             residual_labels = get_residual_labels(logits)
+            
+            if residual_labels == []:
+                break
 
             # instead of using the logits and the gradient of the logits,
             # we use a numerically stable implementation of the cross-entropy
