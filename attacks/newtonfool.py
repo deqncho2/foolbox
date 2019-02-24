@@ -64,8 +64,8 @@ class NewtonFoolAttack(Attack):
             logits, gradients, is_adversarial = \
                 a.predictions_and_gradient(perturbed_image)
 
-            # if is_adversarial:
-            #     return
+            if is_adversarial:
+                return
 
             score = np.max(softmax(logits))
             # instead of using the logits and the gradient of the logits,
